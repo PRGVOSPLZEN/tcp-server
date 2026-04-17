@@ -1,9 +1,10 @@
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <unistd.h>
-#include <cstring>
+#include <string>
 #include <chrono>
 #include <ctime>
 
@@ -49,9 +50,21 @@ int main() {
             
             std::ofstream outfile;
             outfile.open("log.txt", std::ios_base::app);
+
+            std::stringstream ss;
+
+            ss << buffer;
+
+            std::string type;
+            std::string id;
+            std::string value;
+
+            std::getline(ss, type, ':');
+            std::getline(ss, id, ':');
+            std::getline(ss, value, ':');
             
             if (outfile.is_open()) {
-                outfile << "[" << getCurrentTime() << "] " << buffer;
+                outfile << "[" << getCurrentTime() << "] " << "TYPE: " << type << " | ID: " << id << " | VALUE: " << value << std::endl;
                 outfile.close();
                 std::cout << "Data ulozena." << std::endl;
             }
